@@ -1,0 +1,68 @@
+### Register
+POST http://localhost:5000/register
+Content-Type: application/json
+
+{
+    "nama": "Zee",
+    "username": "zee123",
+    "password": "zee321",
+    "retypePassword": "zee321"
+}
+
+### Login
+POST http://localhost:5000/login
+Content-Type: application/json
+
+{
+    "username": "dika123",
+    "password": "dika321"
+}
+
+### Create New Task
+POST http://localhost:5000/task
+Content-Type: application/json
+
+{
+    "namaTask": "Tugas Sistem Informasi",
+    "deskripsi": "Bikin Diagram ERD",
+    "dateLine": "2023-12-31T23:59:59Z",
+    "prioritas": "Sedang",
+    "userId": 3,
+    "tags": [
+        {
+            "namaTag": "Tugas"
+        },
+        {
+            "namaTag": "Belajar"
+        },
+        {
+            "namaTag": "Proyek"
+        }
+    ]
+}
+
+### Get All Task
+GET http://localhost:5000/tasks/3
+
+### Delete Task
+DELETE http://localhost:5000/task/2
+
+### Update Task
+PATCH http://localhost:5000/task/6
+Content-Type: application/json
+
+{
+    "deskripsi": "Deskripsi baru",
+    "prioritas": "Tinggi",
+    "tags": [
+        {
+            "namaTag": "Kuliah"
+        }
+    ]
+}
+
+
+
+
+
+
