@@ -12,6 +12,7 @@
     "@emotion/styled": "^11.11.0",
     "@hypertheme-editor/chakra-ui": "^0.1.5",
     "@mui/icons-material": "^5.15.2",
+    "@mui/joy": "^5.0.0-beta.20",
     "@mui/material": "^5.15.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",

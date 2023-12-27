@@ -55,6 +55,59 @@ export const columnsDataColumns = [
   },
 ];
 
+
+export const columnDataTasks = [
+  {
+    Header: "No",
+    accessor: (originalRow, rowIndex) => rowIndex + 1,
+  },
+  {
+    Header: "Task Name",
+    accessor: "namaTask",
+  },
+  {
+    Header: "DateLine",
+    accessor: "dateLine",
+  },
+  {
+    Header: "Priority",
+    accessor: "prioritas",
+  },
+  {
+    Header: "Status",
+    accessor: "isCompleted",
+    Cell: ({ value }) => (value ? "Completed" : "Incomplete"),
+  },
+  {
+    Header: "Tags",
+    accessor: "tags",
+    Cell: ({ value }) => value.map((tag) => tag.namaTag).join(", "),
+  },
+  {
+    Header: "Action",
+    accessor: "action",
+  },
+];
+
+export const columnDataTags = [
+  {
+    Header: "No",
+    accessor: (originalRow, rowIndex) => rowIndex + 1,
+  },
+  {
+    Header: "Tag Name",
+    accessor: "namaTag",
+  },
+  {
+    Header: "Description",
+    accessor: "deskripsi",
+  },
+  {
+    Header: "Action",
+    accessor: "action",
+  },
+];
+
 export const columnsDataComplex = [
   {
     Header: "NAME",
