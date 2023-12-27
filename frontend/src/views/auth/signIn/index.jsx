@@ -35,7 +35,6 @@ function SignIn() {
   
       console.log('Response : ', response.data.msg);
       history.push('/dashboard');
-      window.location.reload();
 
     } catch (error) {
       setIsError(true)

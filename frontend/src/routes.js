@@ -23,7 +23,7 @@ const routes = [
   {
     name: "Main Dashboard",
     layout: "/dashboard",
-    path: "/task-list",
+    path: "/default",
     icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
     component: MainDashboard,
   },
@@ -64,7 +64,7 @@ const routes = [
     component: SignInCentered,
   },
   {
-    name: "RTL",
+    name: "RTL Admin",
     layout: "/rtl",
     path: "/rtl-default",
     icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
