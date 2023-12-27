@@ -21,16 +21,16 @@ import SignInCentered from "views/auth/signIn";
 
 const routes = [
   {
-    name: "Main Dashboard",
+    name: "Tasks List",
     layout: "/dashboard",
-    path: "/default",
+    path: "/tasks-list",
     icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
     component: MainDashboard,
   },
   {
-    name: "NFT Marketplace",
+    name: "Completed Tasks",
     layout: "/dashboard",
-    path: "/nft-marketplace",
+    path: "/completed-tasks",
     icon: (
       <Icon
         as={MdOutlineShoppingCart}
@@ -43,25 +43,18 @@ const routes = [
     secondary: true,
   },
   {
-    name: "Data Tables",
+    name: "Incompleted Tasks",
     layout: "/dashboard",
     icon: <Icon as={MdBarChart} width='20px' height='20px' color='inherit' />,
-    path: "/data-tables",
+    path: "/incompleted-tasks",
     component: DataTables,
   },
   {
-    name: "Profile",
+    name: "Tags",
     layout: "/dashboard",
-    path: "/profile",
+    path: "/tags",
     icon: <Icon as={MdPerson} width='20px' height='20px' color='inherit' />,
     component: Profile,
-  },
-  {
-    name: "Sign In",
-    layout: "/auth",
-    path: "/sign-in",
-    icon: <Icon as={MdLock} width='20px' height='20px' color='inherit' />,
-    component: SignInCentered,
   },
   {
     name: "RTL Admin",
