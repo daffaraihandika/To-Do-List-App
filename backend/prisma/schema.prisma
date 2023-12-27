@@ -16,6 +16,7 @@ model User {
   username  String @unique
   password String
   task Task[]
+  tags Tag[]
 }
 
 enum Prioritas {
@@ -42,5 +43,7 @@ model Tag{
   namaTag String @unique
   deskripsi String?
   tasks Task[]
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId Int
 }
 
