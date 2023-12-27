@@ -43,11 +43,17 @@ export const login = async(req, res) => {
     try {
         const {username, password} = req.body
 
+        console.log(req.body)
+
         const user = await prisma.user.findUnique({
             where:{
                 username: username,
             }
         })
+
+        if (!user) {
+            return res.status(400).json({ msg: 'Username atau password salah' });
+        }
 
         const matchPassword =  await bcrypt.compareSync(password, user.password)
 

@@ -22,14 +22,14 @@ import SignInCentered from "views/auth/signIn";
 const routes = [
   {
     name: "Main Dashboard",
-    layout: "/admin",
-    path: "/default",
+    layout: "/dashboard",
+    path: "/task-list",
     icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
     component: MainDashboard,
   },
   {
     name: "NFT Marketplace",
-    layout: "/admin",
+    layout: "/dashboard",
     path: "/nft-marketplace",
     icon: (
       <Icon
@@ -44,14 +44,14 @@ const routes = [
   },
   {
     name: "Data Tables",
-    layout: "/admin",
+    layout: "/dashboard",
     icon: <Icon as={MdBarChart} width='20px' height='20px' color='inherit' />,
     path: "/data-tables",
     component: DataTables,
   },
   {
     name: "Profile",
-    layout: "/admin",
+    layout: "/dashboard",
     path: "/profile",
     icon: <Icon as={MdPerson} width='20px' height='20px' color='inherit' />,
     component: Profile,

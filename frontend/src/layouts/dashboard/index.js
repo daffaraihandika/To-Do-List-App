@@ -17,7 +17,7 @@ export default function Dashboard(props) {
 	const [ toggleSidebar, setToggleSidebar ] = useState(false);
 	// functions for changing the states from components
 	const getRoute = () => {
-		return window.location.pathname !== '/admin/full-screen-maps';
+		return window.location.pathname !== '/dashboard/full-screen-maps';
 	};
 	const getActiveRoute = (routes) => {
 		let activeRoute = 'Default Brand Text';
@@ -84,7 +84,7 @@ export default function Dashboard(props) {
 	};
 	const getRoutes = (routes) => {
 		return routes.map((prop, key) => {
-			if (prop.layout === '/admin') {
+			if (prop.layout === '/dashboard') {
 				return <Route path={prop.layout + prop.path} component={prop.component} key={key} />;
 			}
 			if (prop.collapse) {
@@ -140,7 +140,7 @@ export default function Dashboard(props) {
 							<Box mx='auto' p={{ base: '20px', md: '30px' }} pe='20px' minH='100vh' pt='50px'>
 								<Switch>
 									{getRoutes(routes)}
-									<Redirect from='/' to='/admin' />
+									<Redirect from='/' to='/dashboard/task-list' />
 								</Switch>
 							</Box>
 						) : null}
