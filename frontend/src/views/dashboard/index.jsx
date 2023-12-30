@@ -39,19 +39,15 @@ import {
   Thead,
   Tr,
   useColorModeValue,
-  Icon,
-  useBreakpointValue
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import Card from "components/card/Card";
 import Menu from "components/menu/MainMenu";
 import axios from "axios";
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
-
-import { MdCheckCircle, MdCancel } from "react-icons/md";
-
 import PageviewOutlinedIcon from '@mui/icons-material/PageviewOutlined';
+
 import { TasksListTable } from "./components/TasksListTable";
 
 // Data Variables
@@ -61,21 +57,21 @@ import {
 } from "views/admin/dataTables/variables/columnsData";
 
 const handleEdit = (tagId) => {
-    // Handle edit logic here
-    console.log("Edit tag with ID:", tagId);
-  };
+  // Handle edit logic here
+  console.log("Edit tag with ID:", tagId);
+};
 
 const handleViewDetails = (tagId) => {
-    // Handle edit logic here
-    console.log("View details tag with ID:", tagId);
-  };
+  // Handle edit logic here
+  console.log("View details tag with ID:", tagId);
+};
 
-  const handleDelete = (tagId) => {
-    // Handle delete logic here
-    console.log("Delete tag with ID:", tagId);
-  };
+const handleDelete = (tagId) => {
+  // Handle delete logic here
+  console.log("Delete tag with ID:", tagId);
+};
 
-const TagsListTable = (props) => {
+export const TagsListTable = (props) => {
   const { columnsData, tableData } = props;
 
   const columns = useMemo(() => columnsData, [columnsData]);
@@ -87,7 +83,7 @@ const TagsListTable = (props) => {
     headerGroups,
     page,
     prepareRow,
-    state: { pageIndex, pageSize },
+    state: { pageIndex },
     nextPage,
     previousPage,
     canNextPage,
@@ -98,7 +94,7 @@ const TagsListTable = (props) => {
     {
       columns,
       data,
-      initialState: { pageIndex: 0, pageSize: 5 }, // Set your initial state here
+      initialState: { pageIndex: 0, pageSize: 5 },
     },
     useGlobalFilter,
     useSortBy,
@@ -212,6 +208,20 @@ const TagsListTable = (props) => {
         })}
         </Tbody>
       </Table>
+      <Button
+        variant='darkBrand'
+        color='white'
+        fontSize='sm'
+        fontWeight='500'
+        borderRadius='70px'
+        px='24px'
+        py='5px'
+        width='150px'
+        marginLeft='20px'
+        marginBottom='24px'
+        >
+        Add Tag
+      </Button>
       <Flex justify='space-between' mt='2'>
         <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {'<<'}
@@ -239,6 +249,7 @@ const TagsListTable = (props) => {
 const Dashboard = () => {
     const [tasks, setTasks] = useState([])
     const [tags, setTags] = useState([])
+    const userId = localStorage.getItem("userId");
 
     useEffect(() => {
         getAllTasks()
@@ -247,7 +258,7 @@ const Dashboard = () => {
 
     const getAllTasks = async(e) => {
         try {
-            const response = await axios.get(`http://localhost:5000/tasks/1`)
+            const response = await axios.get(`http://localhost:5000/tasks/${userId}`)
             console.log("Tasks : ", response.data.data)
             setTasks(response.data.data);
         } catch (error) {
@@ -257,7 +268,7 @@ const Dashboard = () => {
 
     const getAllTags = async(e) => {
         try {
-            const response = await axios.get(`http://localhost:5000/tags/1`)
+            const response = await axios.get(`http://localhost:5000/tags/${userId}`)
             console.log("Tags : ", response.data.data)
             setTags(response.data.data);
         } catch (error) {

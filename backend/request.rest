@@ -3,10 +3,10 @@ POST http://localhost:5000/register
 Content-Type: application/json
 
 {
-    "nama": "Daffa",
-    "username": "daffa123",
-    "password": "daffa321",
-    "retypePassword": "daffa321"
+    "nama": "James",
+    "username": "james123",
+    "password": "james321",
+    "retypePassword": "james321"
 }
 
 ### Login
@@ -23,19 +23,19 @@ POST http://localhost:5000/task
 Content-Type: application/json
 
 {
-    "namaTask": "Tugas Nga scam batur",
-    "deskripsi": "scammer",
+    "namaTask": "Tugas d",
+    "deskripsi": "Desc c",
     "dateLine": "2024-12-07",
     "prioritas": "Tinggi",
-    "userId": 1,
+    "userId": 2,
     "tags": [
         {
             "namaTag": "Tugas",
-            "deskripsi": "Deskripsi Tugas"
+            "deskripsi": ""
         },
         {
-            "namaTag": "Scam",
-            "deskripsi": "nga scam batur"
+            "namaTag": "Kuliah",
+            "deskripsi": ""
         }
     ]
 }
@@ -45,8 +45,8 @@ POST http://localhost:5000/task
 Content-Type: application/json
 
 {
-    "namaTask": "Tugas KWU",
-    "dateLine": "2024-12-08",
+    "namaTask": "Tugas PJOK",
+    "dateLine": "2024-12-09",
     "prioritas": "Rendah",
     "userId": 1,
     "tags": [

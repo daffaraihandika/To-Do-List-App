@@ -1,5 +1,5 @@
 import { Button } from "@chakra-ui/react";
-import { React, useMemo } from "react";
+import { React, useMemo, useState } from "react";
 import {
   useGlobalFilter,
   usePagination,
@@ -26,6 +26,8 @@ import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 
 import { MdCheckCircle, MdCancel } from "react-icons/md";
 
+import { ModalAddTask } from "./ModalAddTask";
+
 const handleEdit = (taskId) => {
     // Handle edit logic here
     console.log("Edit task with ID:", taskId);
@@ -43,6 +45,7 @@ const handleComplete = (taskId) => {
 
 export const TasksListTable = (props) => {
   const { columnsData, tableData } = props;
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const columns = useMemo(() => columnsData, [columnsData]);
   const data = useMemo(() => tableData, [tableData]);
@@ -53,7 +56,7 @@ export const TasksListTable = (props) => {
     headerGroups,
     page,
     prepareRow,
-    state: { pageIndex, pageSize },
+    state: { pageIndex },
     nextPage,
     previousPage,
     canNextPage,
@@ -236,6 +239,22 @@ export const TasksListTable = (props) => {
         })}
         </Tbody>
       </Table>
+      <Button
+        variant='darkBrand'
+        color='white'
+        fontSize='sm'
+        fontWeight='500'
+        borderRadius='70px'
+        px='24px'
+        py='5px'
+        width='150px'
+        marginLeft='20px'
+        marginBottom='24px'
+        onClick={() => setIsModalOpen(true)}
+        >
+        Add Task
+      </Button>
+      <ModalAddTask isOpen={isModalOpen} onCloseModal={() => setIsModalOpen(false)} />
       <Flex justify='space-between' mt='2'>
         <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {'<<'}

@@ -6,6 +6,9 @@ const prisma = new PrismaClient()
 export const register = async (req,res) => {
     try {
         const {nama, username, password, retypePassword} = req.body;
+
+        console.log(req.body);
+
         const existingUser = await prisma.user.findUnique({
             where: {
                 username: username
@@ -61,7 +64,7 @@ export const login = async(req, res) => {
             return res.status(400).json({msg: 'Username atau password salah'})
         }
 
-        return res.status(200).json({msg: 'Login Berhasil', data: {nama: user.nama, username: user.username}})
+        return res.status(200).json({msg: 'Login Berhasil', data: {id: user.id, nama: user.nama, username: user.username}})
         
     } catch (error) {
         console.log(error)

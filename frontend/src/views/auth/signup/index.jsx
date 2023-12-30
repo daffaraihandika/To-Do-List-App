@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,6 +12,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
+import Alert from '@mui/material/Alert';
+import { useHistory } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -31,13 +34,33 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
+  const [firstName, setFirstName] = useState()
+  const [lastName, setLastName] = useState()
+  const [username, setUsername] = useState()
+  const [password, setPassword] = useState()
+  const [retypePassword, setRetypePassword] = useState()
+  const [isError, setIsError] = useState(false)
+  const [msg, setMessage] = useState() 
+
+  const history = useHistory();
+
+  const handleSubmit = async(event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    try {
+      const response = await axios.post('http://localhost:5000/register', {
+        nama: firstName + ' ' + lastName,
+        username,
+        password,
+        retypePassword
+      });
+
+      console.log('Response : ', response.data.msg);
+      history.push('/signin');
+    } catch (error) {
+      setIsError(true)
+      setMessage(error.response.data.msg)
+      console.log(error.response.data.msg);
+    }
   };
 
   return (
@@ -69,6 +92,7 @@ export default function SignUp() {
                   id="firstName"
                   label="First Name"
                   autoFocus
+                  onChange={(e) => setFirstName(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -79,16 +103,18 @@ export default function SignUp() {
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
+                  onChange={(e) => setLastName(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
+                  id="username"
+                  label="Username"
+                  name="username"
+                  autoComplete="username"
+                  onChange={(e) => setUsername(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -100,20 +126,28 @@ export default function SignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
+                <TextField
+                  required
+                  fullWidth
+                  name="retype-password"
+                  label="Retype Password"
+                  type="password"
+                  id="retype-password"
+                  autoComplete="retype-password"
+                  onChange={(e) => setRetypePassword(e.target.value)}
                 />
               </Grid>
             </Grid>
+              {isError && <Alert severity="error" sx={{ mt:2 }}>{msg}</Alert>}
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 2, mb: 2 }}
             >
               Sign Up
             </Button>

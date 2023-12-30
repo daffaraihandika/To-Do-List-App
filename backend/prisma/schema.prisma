@@ -40,10 +40,11 @@ model Task{
 
 model Tag{
   id Int     @id @default(autoincrement())
-  namaTag String @unique
+  namaTag String 
   deskripsi String?
   tasks Task[]
   user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId Int
+  @@unique([namaTag, userId])
 }
 

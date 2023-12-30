@@ -7,29 +7,40 @@ export const createTask = async (req,res) => {
     try {
         const { namaTask, deskripsi, dateLine, prioritas, userId, tags } = req.body;
 
+        console.log(req.body)
+
         if (!namaTask || !dateLine || !prioritas || !userId || !tags || tags.length === 0) {
             return res.status(400).json({ msg: 'Semua field harus diisi' });
         }
 
         const newTask = await prisma.task.create({
             data: {
-              namaTask,
-              deskripsi,
-              createDate: new Date(),
-              dateLine: endOfDay(parseISO(dateLine)),
-              prioritas,
-              isCompleted: false,
-              user: {
-                connect: { id: userId },
-              },
-              tags: {
-                connectOrCreate: tags.map(tag => ({
-                  where: { namaTag: tag.namaTag },
-                  create: { namaTag: tag.namaTag, deskripsi: tag.deskripsi || '', userId:userId },
-                })),
-              },
+                namaTask,
+                deskripsi,
+                createDate: new Date(),
+                dateLine: endOfDay(parseISO(dateLine)),
+                prioritas,
+                isCompleted: false,
+                user: {
+                    connect: { id: userId },
+                },
+                tags: {
+                    connectOrCreate: tags.map(tag => ({
+                        where: {
+                            namaTag_userId: {
+                                namaTag: tag.namaTag,
+                                userId: userId,
+                            },
+                        },
+                        create: {
+                            namaTag: tag.namaTag,
+                            deskripsi: tag.deskripsi || '',
+                            userId: userId,
+                        },
+                    })),
+                },
             },
-        });          
+        });                                        
 
         return res.status(201).json({msg: 'Task baru berhasil dibuat', data: {id: newTask.id, namaTask: newTask.namaTask, dateLine: newTask.dateLine, prioritas: newTask.prioritas, isCompleted: newTask.isCompleted, user: newTask.user}})
     } catch (error) {

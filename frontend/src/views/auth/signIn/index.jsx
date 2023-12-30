@@ -33,7 +33,8 @@ function SignIn() {
         username, password
       });
   
-      console.log('Response : ', response.data.msg);
+      console.log('Response : ', response.data);
+      localStorage.setItem("userId", response.data.data.id);
       history.push('/dashboard');
 
     } catch (error) {
@@ -66,9 +67,9 @@ function SignIn() {
               margin="normal"
               required
               fullWidth
-              id="email"
+              id="username"
               label="Username"
-              name="text"
+              name="username"
               type='text'
               autoFocus
               onChange={(e) => setUsername(e.target.value)}
