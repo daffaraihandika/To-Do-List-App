@@ -6,12 +6,19 @@ export const createTag = async (req, res) => {
     try {
         const { namaTag, deskripsi, userId } = req.body;
 
+        console.log(req.body)
+
         if (!namaTag) {
             return res.status(400).json({ msg: 'Nama tag harus diisi' });
         }
 
         const newTag = await prisma.tag.upsert({
-            where: { namaTag },
+            where: { 
+                namaTag_userId: {
+                    namaTag,
+                    userId,
+                },
+             },
             update: { deskripsi: deskripsi || '' },
             create: { namaTag, deskripsi: deskripsi || '', userId },
         });

@@ -79,15 +79,15 @@ GET http://localhost:5000/tasks/1/7
 DELETE http://localhost:5000/task/1/5
 
 ### Update Task
-PATCH http://localhost:5000/task/1/7
+PATCH http://localhost:5000/task/1/62
 Content-Type: application/json
 
 {
     "deskripsi": "Deskripsi baru",
-    "prioritas": "Tinggi",
+    "prioritas": "Rendah",
     "tags": [
         {
-            "namaTag": "Tag Baru"
+            "namaTag": "Kuliah"
         }
     ]
 }
@@ -100,8 +100,8 @@ Content-Type: application/json
     "dateLine": "2024-12-04"
 }
 
-### Update Task
-PATCH http://localhost:5000/task/1/7
+### Complete Task
+PATCH http://localhost:5000/complete-task/1/47
 Content-Type: application/json
 
 {
@@ -114,7 +114,7 @@ Content-Type: application/json
 
 {
     "namaTag": "Kuliah",
-    "deskripsi": "kegiatan kuliah",
+    "deskripsi": "kegiatan ronda",
     "userId": 1
 }
 

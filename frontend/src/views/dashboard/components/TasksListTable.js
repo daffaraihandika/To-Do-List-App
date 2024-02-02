@@ -1,5 +1,5 @@
+import { React, useMemo, useState, useRef } from "react";
 import { Button } from "@chakra-ui/react";
-import { React, useMemo, useState } from "react";
 import {
   useGlobalFilter,
   usePagination,
@@ -26,29 +26,38 @@ import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 
 import { MdCheckCircle, MdCancel } from "react-icons/md";
 
+// Toast
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+// Alert Dialog
+import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  AlertDialogCloseButton,
+} from '@chakra-ui/react'
+
+
 import { ModalAddTask } from "./ModalAddTask";
-
-const handleEdit = (taskId) => {
-    // Handle edit logic here
-    console.log("Edit task with ID:", taskId);
-  };
-
-const handleComplete = (taskId) => {
-    // Handle edit logic here
-    console.log("Complete task with ID:", taskId);
-  };
-
-  const handleDelete = (taskId) => {
-    // Handle delete logic here
-    console.log("Delete task with ID:", taskId);
-  };
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 export const TasksListTable = (props) => {
   const { columnsData, tableData } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTaskId, setSelectedTaskId] = useState(null);
+
+  let successMsg
+  const userId = localStorage.getItem("userId")
 
   const columns = useMemo(() => columnsData, [columnsData]);
   const data = useMemo(() => tableData, [tableData]);
+
+  const history = useHistory();
 
   const {
     getTableProps,
@@ -77,6 +86,68 @@ export const TasksListTable = (props) => {
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
 
+  // Alert Dialog
+  const cancelRef = useRef();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const onClose = () => setIsOpen(false);
+
+  const onAddClick = () => {
+    setIsModalOpen(true);
+    setSelectedTaskId(null);
+  };
+
+  const handleEditClick = (taskId) => {
+    setIsModalOpen(true);
+    setSelectedTaskId(taskId);
+  };
+
+  const handleComplete = async(taskId) => {
+    // Handle edit logic here
+    console.log("Complete task with ID:", taskId);
+    try {
+      const response = await axios.patch(`http://localhost:5000/complete-task/${userId}/${taskId}`, {
+        isCompleted: true,
+      })
+      successMsg = response.data.msg
+      history.push('/dashboard');
+      notify()
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
+  const handleDelete = (taskId) => {
+    setIsOpen(true);
+    setSelectedTaskId(taskId)
+  };
+
+  const confirmDelete = async() => {
+    setIsOpen(true);
+    try {
+      const response = await axios.delete(`http://localhost:5000/task/${userId}/${selectedTaskId}`)
+      successMsg = response.data.msg
+      history.push('/dashboard');
+      notify()
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
+  const notify = () => {
+    toast.success(successMsg, {
+      position: "bottom-left",
+      autoClose: 1000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  };
+
+  
   return (
     <Card
       direction='column'
@@ -212,7 +283,7 @@ export const TasksListTable = (props) => {
                         <Button onClick={() => handleComplete(row.original.id)}>
                             <CheckOutlinedIcon sx={{ color: '#01B574' }}/>
                         </Button>
-                        <Button onClick={() => handleEdit(row.original.id)}>
+                        <Button onClick={() => handleEditClick(row.original.id)}>
                             <EditOutlinedIcon/>
                         </Button>
                         <Button onClick={() => handleDelete(row.original.id)}>
@@ -250,11 +321,18 @@ export const TasksListTable = (props) => {
         width='150px'
         marginLeft='20px'
         marginBottom='24px'
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => onAddClick()}
         >
         Add Task
       </Button>
-      <ModalAddTask isOpen={isModalOpen} onCloseModal={() => setIsModalOpen(false)} />
+      <ModalAddTask
+        isOpen={isModalOpen}
+        onCloseModal={() => {
+          setIsModalOpen(false);
+          setSelectedTaskId(null);
+        }}
+        editTaskId={selectedTaskId}
+      />
       <Flex justify='space-between' mt='2'>
         <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {'<<'}
@@ -275,6 +353,32 @@ export const TasksListTable = (props) => {
           {'>>'}
         </Button>
       </Flex>
+      <AlertDialog
+        motionPreset='slideInBottom'
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+        isOpen={isOpen}
+        isCentered
+      >
+        <AlertDialogOverlay />
+
+        <AlertDialogContent>
+          <AlertDialogHeader>Delete Task?</AlertDialogHeader>
+          <AlertDialogCloseButton />
+          <AlertDialogBody>
+            Are you sure you want to delete this task?
+          </AlertDialogBody>
+          <AlertDialogFooter>
+            <Button ref={cancelRef} onClick={onClose}>
+              No
+            </Button>
+            <Button colorScheme='red' ml={3} onClick={confirmDelete}>
+              Yes
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      <ToastContainer />
     </Card>
   );
 };

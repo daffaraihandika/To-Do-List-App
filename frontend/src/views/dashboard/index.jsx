@@ -49,6 +49,7 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import PageviewOutlinedIcon from '@mui/icons-material/PageviewOutlined';
 
 import { TasksListTable } from "./components/TasksListTable";
+import { ModalAddTag } from "./components/ModalAddTag";
 
 // Data Variables
 import {
@@ -56,23 +57,17 @@ import {
   columnDataTags
 } from "views/admin/dataTables/variables/columnsData";
 
-const handleEdit = (tagId) => {
-  // Handle edit logic here
-  console.log("Edit tag with ID:", tagId);
-};
+// const handleEdit = (tagId) => {
+//   // Handle edit logic here
+//   console.log("Edit tag with ID:", tagId);
+// };
 
-const handleViewDetails = (tagId) => {
-  // Handle edit logic here
-  console.log("View details tag with ID:", tagId);
-};
 
-const handleDelete = (tagId) => {
-  // Handle delete logic here
-  console.log("Delete tag with ID:", tagId);
-};
 
 export const TagsListTable = (props) => {
   const { columnsData, tableData } = props;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTagId, setSelectedTagId] = useState(null);
 
   const columns = useMemo(() => columnsData, [columnsData]);
   const data = useMemo(() => tableData, [tableData]);
@@ -105,6 +100,26 @@ export const TagsListTable = (props) => {
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
 
   const cardWidth = useBreakpointValue({ base: "100%", xl: "60%" });
+
+  const onAddClick = () => {
+    setIsModalOpen(true);
+    setSelectedTagId(null);
+  };
+
+  const handleEditClick = (tagId) => {
+    setIsModalOpen(true);
+    setSelectedTagId(tagId);
+  };
+
+  const handleViewDetails = (tagId) => {
+    // Handle edit logic here
+    console.log("View details tag with ID:", tagId);
+  };
+  
+  const handleDelete = (tagId) => {
+    // Handle delete logic here
+    console.log("Delete tag with ID:", tagId);
+  };
 
   return (
     <Card
@@ -181,7 +196,7 @@ export const TagsListTable = (props) => {
                             <Button onClick={() => handleViewDetails(row.original.id)}>
                                 <PageviewOutlinedIcon sx={{ color: '#01B574' }}/>
                             </Button>
-                            <Button onClick={() => handleEdit(row.original.id)}>
+                            <Button onClick={() => handleEditClick(row.original.id)}>
                                 <EditOutlinedIcon/>
                             </Button>
                             <Button onClick={() => handleDelete(row.original.id)}>
@@ -219,9 +234,18 @@ export const TagsListTable = (props) => {
         width='150px'
         marginLeft='20px'
         marginBottom='24px'
+        onClick={() => onAddClick()}
         >
         Add Tag
       </Button>
+      <ModalAddTag 
+        isOpen={isModalOpen} 
+        onCloseModal={() => {
+          setIsModalOpen(false);
+          setSelectedTagId(null);
+        }}
+        editTagId={selectedTagId}
+      />
       <Flex justify='space-between' mt='2'>
         <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {'<<'}

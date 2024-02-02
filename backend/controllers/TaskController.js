@@ -60,7 +60,7 @@ export const getAllTasks = async(req, res) => {
                 tags: true,
             },
             orderBy:{
-                dateLine: 'asc'
+                createDate: 'desc'
             }
         })
 
@@ -130,11 +130,52 @@ export const deleteTask = async (req,res) => {
     }
 }
 
+export const completeTask = async(req,res) => {
+    try {
+        const taskId = parseInt(req.params.taskId, 10);
+        const userId = parseInt(req.params.userId, 10);
+
+        const { isCompleted } = req.body;
+        console.log(req.body)
+
+        const existingTask = await prisma.task.findUnique({
+            where: { id: taskId },
+            include: { tags: true },
+        });
+
+        if (!existingTask) {
+            return res.status(404).json({ msg: 'Task tidak ditemukan' });
+        }
+
+        const completeTask = await prisma.task.update({
+            where: { id: taskId },
+            data: {
+              namaTask: existingTask.namaTask,
+              deskripsi: existingTask.deskripsi,
+              dateLine: existingTask.dateLine,
+              prioritas: existingTask.prioritas,
+              isCompleted: isCompleted !== undefined ? isCompleted : existingTask.isCompleted,
+            },
+            include: {
+              tags: true,
+            },
+        });
+
+        return res.status(200).json({ msg: 'Berhasil menyelesaikan task', data: completeTask });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ msg: 'Terjadi kesalahan saat memperbarui task' });
+    }
+}
+
 export const updateTask = async (req, res) => {
     try {
       const taskId = parseInt(req.params.taskId, 10);
       const userId = parseInt(req.params.userId, 10);
       const { namaTask, deskripsi, dateLine, prioritas, isCompleted, tags } = req.body;
+
+      console.log(req.body)
   
       const existingTask = await prisma.task.findUnique({
         where: { id: taskId },
@@ -145,15 +186,25 @@ export const updateTask = async (req, res) => {
         return res.status(404).json({ msg: 'Task tidak ditemukan' });
       }
   
-      let updatedTags = existingTask.tags;
+      let updatedTags = [];
   
       if (tags) {
         // If tags are provided, map over them
         updatedTags = tags.map(tag => ({
-          where: { namaTag: tag.namaTag },
+          where: { 
+            namaTag_userId: {
+                namaTag: tag.namaTag,
+                userId: userId,
+            },
+           },
           create: { namaTag: tag.namaTag, deskripsi: tag.deskripsi || '', userId: userId }
         }));
       }
+
+      // Find tags to disconnect (remove) - tags
+      const tagsToDisconnect = existingTask.tags.filter(existingTag =>
+        !tags.some(newTag => newTag.namaTag === existingTag.namaTag)
+      );
   
       const updatedTask = await prisma.task.update({
         where: { id: taskId },
@@ -164,7 +215,8 @@ export const updateTask = async (req, res) => {
           prioritas: prioritas || existingTask.prioritas,
           isCompleted: isCompleted !== undefined ? isCompleted : existingTask.isCompleted,
           tags: {
-            ...(tags && { connectOrCreate: updatedTags }),
+            connectOrCreate: updatedTags,
+            disconnect: tagsToDisconnect.map(tag => ({ id: tag.id })),
           },
         },
         include: {

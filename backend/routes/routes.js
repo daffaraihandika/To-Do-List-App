@@ -1,6 +1,6 @@
 import express from "express";
 import { register, login } from "../controllers/UserController.js";
-import { createTask, getAllTasks, deleteTask, updateTask, getDetailTask, getTasksByDateRange, filterTaskByPriority, getCompleteTask, getIncompleteTask } from "../controllers/TaskController.js";
+import { createTask, getAllTasks, deleteTask, updateTask, getDetailTask, getTasksByDateRange, filterTaskByPriority, getCompleteTask, getIncompleteTask, completeTask } from "../controllers/TaskController.js";
 import { createTag, getAllTags, getDetailTags, updateTags, deleteTags } from "../controllers/TagController.js";
 
 const router = express.Router();
@@ -18,6 +18,7 @@ router.post('/task', createTask)
 router.get('/tasks/:userId', getAllTasks)
 router.delete('/task/:userId/:taskId', deleteTask)
 router.patch('/task/:userId/:taskId', updateTask)
+router.patch('/complete-task/:userId/:taskId', completeTask)
 router.get('/tasks/:userId/filter-by-date', getTasksByDateRange)
 router.get('/tasks/:userId/filter-by-priority', filterTaskByPriority)
 router.get('/tasks/:userId/completed', getCompleteTask);
